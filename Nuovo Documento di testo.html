@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertitore Euro-Lire</title>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(50px); }
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+        }
+
+        .menu button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .menu button:hover {
+            background-color: #0056b3;
+            transform: scale(1.1);
+        }
+
+        .menu button.active {
+            background-color: #0056b3;
+        }
+
+        .calculator {
+            display: none;
+            opacity: 0;
+        }
+
+        .calculator.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+            opacity: 1;
+        }
+
+        .calculator.hiding {
+            animation: fadeOut 0.5s ease-in-out;
+            opacity: 0;
+        }
+
+        .calculator h1 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #007BFF;
+        }
+
+        .calculator label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #555;
+        }
+
+        .calculator input[type="number"], .calculator input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .calculator input:focus {
+            border-color: #007BFF;
+            outline: none;
+        }
+
+        .calculator button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .calculator button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .calculator .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .calculator h1 {
+                font-size: 20px;
+            }
+
+            .calculator input {
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .calculator button {
+                padding: 12px;
+                font-size: 16px;
+            }
+
+            .calculator .result {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="menu">
+            <button id="euroToLireBtn" class="active" onclick="showCalculator('euroToLire')">Convertitore da Euro a Lire</button>
+            <button id="lireToEuroBtn" onclick="showCalculator('lireToEuro')">Convertitore da Lire a Euro</button>
+        </div>
+        
+        <div id="euroToLire" class="calculator active">
+            <h1>Convertitore da Euro a Lire</h1>
+            <label for="euro">Euro</label>
+            <input type="text" id="euro" placeholder="__ (euro)">
+            <label for="centesimi">Centesimi</label>
+            <input type="number" id="centesimi" placeholder="__ centesimi">
+            <button onclick="calcolaLire()">Calcola Lire</button>
+            <div class="result" id="resultEuroToLire"></div>
+        </div>
+
+        <div id="lireToEuro" class="calculator">
+            <h1>Convertitore da Lire a Euro</h1>
+            <label for="lire">Lire</label>
+            <input type="number" id="lire" placeholder="Inserisci importo in lire">
+            <button onclick="calcolaEuro()">Calcola Euro</button>
+            <div class="result" id="resultLireToEuro"></div>
+        </div>
+    </div>
+
+    <script>
+        function showCalculator(calculator) {
+            const euroToLireCalc = document.getElementById('euroToLire');
+            const lireToEuroCalc = document.getElementById('lireToEuro');
+            const euroToLireBtn = document.getElementById('euroToLireBtn');
+            const lireToEuroBtn = document.getElementById('lireToEuroBtn');
+            
+            if (calculator === 'euroToLire') {
+                lireToEuroCalc.classList.remove('active');
+                euroToLireCalc.classList.add('active');
+                euroToLireBtn.classList.add('active');
+                lireToEuroBtn.classList.remove('active');
+            } else {
+                euroToLireCalc.classList.remove('active');
+                lireToEuroCalc.classList.add('active');
+                lireToEuroBtn.classList.add('active');
+                euroToLireBtn.classList.remove('active');
+            }
+        }
+
+        function calcolaLire() {
+            const euro = parseFloat(document.getElementById('euro').value.replace(',', '.'));
+            const centesimi = parseFloat(document.getElementById('centesimi').value);
+            const totaleEuro = euro + (centesimi / 100);
+            const lire = (totaleEuro * 1936.27).toFixed(2);
+            document.getElementById('resultEuroToLire').innerText = `Totale in Lire: ${lire}`;
+        }
+
+        function calcolaEuro() {
+            const lire = parseFloat(document.getElementById('lire').value);
+            const euro = (lire / 1936.27).toFixed(2);
+            document.getElementById('resultLireToEuro').innerText = `Totale in Euro: ${euro}`;
+        }
+    </script>
+</body>
+</html>
